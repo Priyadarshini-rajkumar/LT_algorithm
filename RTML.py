@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 #scheduling the targets
 import subprocess
 import pandas as pd 
