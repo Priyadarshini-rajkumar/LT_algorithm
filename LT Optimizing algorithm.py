@@ -315,10 +315,8 @@ probability         = Bmag / total_Bmag                   #completeness of the o
 completeness        = round(weighted_RCF_value * probability * 100,2)
 print ('Completeness of the observation: ',completeness,'%')
 
-
-# In[ ]:
-
-
+#=====================================================================================================================================
+#for additional plotting of all targets 
 start_time          = Time("2018-06-26 19:00")
 end_time            = Time("2018-06-27 5:00")
 readout_time        = 18.5   * u.second                            # 2*2 binned 
