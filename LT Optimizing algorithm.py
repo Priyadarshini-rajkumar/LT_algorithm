@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
 
 
 import math 
@@ -39,15 +35,15 @@ Dist_err            = 20  # distance error in Mega parsecs
 Event_ID            = 'GW170817'
 observation_time    = 2 * 60  #mins
 seeing              = 5.0   # units in arcsec
-required_SNR        = 50.0  # used to calculate an estimate for exposure time
-sky_brightness      = 2     
+required_SNR        = 50.0  # (used to calculate an estimate for exposure time)
+sky_brightness      = 2   #La palma Sky Brightness  
 number_of_exposures = 2   
 no_of_filters       = 1
 no_of_exposures     = [1]  # no of exposures in each filter
-GWGC_dir            = "/data1/extprajk/catalogs/GWGC_catalog.csv"
-CLU_NED_dir         = "/data1/extprajk/catalogs/CLU_NEDonly.fits"
-GLADE_dir           = "/data1/extprajk/catalogs/GLADE_2.3.txt"
-bayestar_dir        = "/home/extprajk/Downloads/BAYESTAR/small/S190412m.fits.gz,0"     
+GWGC_dir            = "/data1/extprajk/catalogs/GWGC_catalog.csv" # local directory of GWGC catalog
+CLU_NED_dir         = "/data1/extprajk/catalogs/CLU_NEDonly.fits" # local directory of CLU_NED 
+GLADE_dir           = "/data1/extprajk/catalogs/GLADE_2.3.txt"  # local directory of GLADE Catalog
+bayestar_dir        = "/home/extprajk/Downloads/BAYESTAR/small/S190412m.fits.gz,0"  # local directory of the Bayestar map from GRACEDB website     
 
 #=======================================================================================================
 def distance_filter(Dist, Dist_err, data):
@@ -228,7 +224,7 @@ CLU_NED.columns = [ 'CLUID', 'ID_OTHER', 'name', 'ra', 'dec', 'DM', 'DM_KIN', 'B
                     'K_FLG_K20FE', 'COORD_SOURCE', 'BTC_SOURCE', 'SIZE_SOURCE', 'DM_SOURCE',
                     'DM_KIN_OTHER', 'DM_RANGE', 'Z_SOURCE', 'DM_FLAG', 'RA_GALEX',
                     'DEC_GALEX', 'FUV', 'NUV', 'FUVERR', 'NUVERR', 'Bmag', 'LUM_B',
-                    'dist', 'HAGAL', 'HACAND', 'NEDname']
+                    'dist', 'HAGAL', 'HACAND', 'NEDname']  
 CLU_NED = CLU_NED.loc[:,['name','ra','dec','Bmag','dist']] # only the middle column (desired value) is stored and the rest is dropped.
 #=====================================================================================================
 GLADE               = pd.read_csv(GLADE_dir, delimiter=' ',header = None)
