@@ -3,7 +3,7 @@
 This algorithm can be used to generate ranked lists of candidate galaxies within LIGO/Virgo localisation regions. 
 
 The algorithm performs the following operations :
-* Calculates the percentage of GW Skymap obsevable from a particular location  
+* Calculates the percentage of GW Skymap obsevable from a particular location (Percentage GW skymap observable)
 * Load galaxy catalogues/ GW Bayestar Maps
 * Filter the galaxy catalogs based on the GW error map provided by LIGO/ Virgo GW detectors 
 * Produce a ranked list of candidates by combining GW error-map probability, observability, distance, and absolute magnitude data 
