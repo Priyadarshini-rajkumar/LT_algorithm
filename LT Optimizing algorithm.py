@@ -6,26 +6,6 @@ import numpy as np
 import healpy as hp  
 import matplotlib.pyplot as plt
 from ligo.skymap.postprocess import find_greedy_credible_levels
-#======================================================================================================
-start_time          = Time("2019-06-29 21:00") # start time of LT observation 
-end_time            = Time("2019-06-30 5:00")  # end time of LT observation
-LT                  = Observer.at_site('lapalma')  # information about the site
-LT_constraints      = [AltitudeConstraint(20 * astropy.units.deg), AtNightConstraint.twilight_nautical(),
-                           MoonSeparationConstraint(5 * astropy.units.deg), AirmassConstraint(None)]     # constraits for observability
-Dist                = 40  # estimated distance of the merger event; units in Mega parsec
-Dist_err            = 20  # distance error in Mega parsecs
-Event_ID            = 'GW170817'
-observation_time    = 2 * 60  #mins
-seeing              = 5.0   # units in arcsec
-required_SNR        = 50.0  # (used to calculate an estimate for exposure time)
-sky_brightness      = 2   #La palma Sky Brightness  
-number_of_exposures = 2   
-no_of_filters       = 1
-no_of_exposures     = [1]  # no of exposures in each filter
-GWGC_dir            = "/data1/extprajk/catalogs/GWGC_catalog.csv" # local directory of GWGC catalog
-CLU_NED_dir         = "/data1/extprajk/catalogs/CLU_NEDonly.fits" # local directory of CLU_NED 
-GLADE_dir           = "/data1/extprajk/catalogs/GLADE_2.3.txt"  # local directory of GLADE Catalog
-bayestar_dir        = "/home/extprajk/Downloads/BAYESTAR/small/S190412m.fits.gz,0"  # local directory of the Bayestar map from GRACEDB website     
 
 #=======================================================================================================
 def distance_filter(Dist, Dist_err, data):
@@ -214,6 +194,26 @@ GLADE.columns       = ['PGC','name', 'HyperLEDA name','2MASS name','SDSS-DR12 na
                        'flag1','ra','dec','dist','dist_err','z','Bmag', 'Bmag_err','BMAG',
                        'Jmag','Jmag_err','Hmag','Hmag_err','Kmag','Kmag_err','flag2','flag3']  
 GLADE            = GLADE.loc[:,['name','ra','dec','dist','BMAG']]
+#======================================================================================================
+start_time          = Time("2019-06-29 21:00") # start time of LT observation 
+end_time            = Time("2019-06-30 5:00")  # end time of LT observation
+LT                  = Observer.at_site('lapalma')  # information about the site
+LT_constraints      = [AltitudeConstraint(20 * astropy.units.deg), AtNightConstraint.twilight_nautical(),
+                           MoonSeparationConstraint(5 * astropy.units.deg), AirmassConstraint(None)]     # constraits for observability
+Dist                = 40  # estimated distance of the merger event; units in Mega parsec
+Dist_err            = 20  # distance error in Mega parsecs
+Event_ID            = 'GW170817'
+observation_time    = 2 * 60  #mins
+seeing              = 5.0   # units in arcsec
+required_SNR        = 50.0  # (used to calculate an estimate for exposure time)
+sky_brightness      = 2   #La palma Sky Brightness  
+number_of_exposures = 2   
+no_of_filters       = 1
+no_of_exposures     = [1]  # no of exposures in each filter
+GWGC_dir            = "/data1/extprajk/catalogs/GWGC_catalog.csv" # local directory of GWGC catalog
+CLU_NED_dir         = "/data1/extprajk/catalogs/CLU_NEDonly.fits" # local directory of CLU_NED 
+GLADE_dir           = "/data1/extprajk/catalogs/GLADE_2.3.txt"  # local directory of GLADE Catalog
+bayestar_dir        = "/home/extprajk/Downloads/BAYESTAR/small/S190412m.fits.gz,0"  # local directory of the Bayestar map from GRACEDB website     
 #====================================================================================================
 prob, distmu, distsigma, distnorm = hp.read_map(bayestar_dir, field = [0, 1, 2, 3], verbose = False)
 credible_levels       = find_greedy_credible_levels(prob) # obtaining the probability for each pixel if it is in or outside the error region
