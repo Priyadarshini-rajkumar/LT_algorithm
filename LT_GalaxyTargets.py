@@ -49,6 +49,7 @@ GLADE.columns       = ['PGC','name', 'HyperLEDA name','2MASS name','SDSS-DR12 na
                        'Jmag','Jmag_err','Hmag','Hmag_err','Kmag','Kmag_err','flag2','flag3']  
 GLADE            = GLADE.loc[:,['name','ra','dec','dist','BMAG']]
 #======================================================================================================
+# Information to be updated during the time of running the algorithm
 start_time          = Time("2019-06-29 21:00") # start time of LT observation 
 end_time            = Time("2019-06-30 5:00")  # end time of LT observation
 LT                  = Observer.at_site('lapalma')  # information about the site
@@ -81,6 +82,7 @@ plt.xlabel('distance (Mpc)')
 plt.ylabel('prob Mpc$ˆ{-1}$')
 plt.show()
 #======================================================================================================
+# Applying various constraints specific to the Liverpool Telescope
 host_candidates                            = distance_filter(Dist, Dist_err, GLADE)
 probability_levels, credible_list          = credibility(host_candidates, nside,credible_levels)
 host_candidates.loc[:,'probabilty_region'] = probability_levels
@@ -93,7 +95,9 @@ targets                                 = [FixedTarget(coord = SkyCoord(ra = ra*
 LT                                      = Observer.at_site('lapalma')  # information about the site
 observable                              = is_observable(LT_constraints,LT,targets, time_range=time_range)  # is observable atleast for a short duration for the given time range
 LT_targets                              = host_candidates[observable]
-no_BMAG                                 = LT_targets.loc[:,'BMAG']   != 'NaN'                               # removing galaxies that do not have absolute Blue mag
+#========================================================================================================
+# Weighting each observable target based on Blue Magnitude, Location and Distance probabilty 
+no_BMAG                                 = LT_targets.loc[:,'BMAG']   != 'NaN' # removing galaxies that do not have absolute Blue mag
 LT_targets                              = LT_targets[no_BMAG]
 BMAG_score                              = scoring(LT_targets.BMAG)   # a list of score values for targets based on Blue Magnitude
 LT_targets.loc[:,"BMAG_score"]          = BMAG_score  # adding Bmag_score as a column to the datframe
@@ -102,6 +106,8 @@ LT_targets.loc[:, 'prob_region_score']  = Prob_region_score
 final_score_list                        = final_score(LT_targets.loc[:, ["BMAG_score","prob_region_score",'dist_score']])
 LT_targets.loc[:, "Final_score"]        = final_score_list
 LT_targets                              = LT_targets.sort_values('Final_score', ascending = False)
+#===========================================================================================================
+#Calculating the exposure time specific for the Liverpool telescope 
 BNS_mag                                 = BNS_magnitude(Dist, Dist_err)
 print ('Expected BNS merger apparent magnitude: ', BNS_mag)
 exposure_time                           = exposure_time(BNS_mag, required_SNR, seeing, sky_brightness)
@@ -112,6 +118,7 @@ one_target_obs            = one_filter_obs * no_of_filters
 print ('Time to complete observation of one target:', one_target_obs,'m')
 print  ('Total approximated time of observation:', total_obs,'m')
 #======================================================================================================
+# Finding the total number of galaxies in the GW error volume using schechter luminoisty function
 objects_per_Mpc3 = schechter()
 print ('No of galaxies per Mpc^3:', objects_per_Mpc3)
 GW_sq_deg       = np.sum(credible_levels <= 0.9) * hp.nside2pixarea(nside, degrees=True)  #compute the 90% credible area by counting the number of pixels inside the 90% credible region and multiplying by the area per pixel
@@ -123,7 +130,7 @@ print ('GW Probability volume:', GW_vol_Mpc3,'Mpc3')
 no_of_obj       = int(GW_vol_Mpc3*objects_per_Mpc3)
 print ('Luminous Galaxies in GW Probability Volume:', no_of_obj)
 #======================================================================================================
-
+# Finding the catalog completeness for this event using the approximated RCF function
 prob         = [(i) for i in dp_dr if i>1e-10]
 r_s          = r[dp_dr.index(prob[0])]
 r_end        = r[dp_dr.index(prob[len(prob)-1])]
