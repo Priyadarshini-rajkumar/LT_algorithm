@@ -1,35 +1,17 @@
-
-
 import math 
-import pandas                as pd
-import numpy                 as np
-import astropy.units         as u
-import warnings  
-warnings.filterwarnings('ignore')
-import healpy                as hp 
-import numpy                 as np 
-import matplotlib.pyplot     as plt
-from   astropy               import cosmology
-from   datetime              import datetime
-from scipy.stats             import norm
-from scipy                   import integrate
-from astropy.utils.data      import download_file
-from astropy.cosmology       import default_cosmology, FlatLambdaCDM
-from   astropy.table         import Table
-from   astropy.time          import Time
-from   astropy.coordinates   import SkyCoord,EarthLocation
-from   astroplan             import (Observer, FixedTarget, AltitudeConstraint,AirmassConstraint,
-                                     AtNightConstraint, MoonSeparationConstraint, is_observable,is_always_observable, ObservingBlock)
-from   astroplan.constraints import TimeConstraint
+import astroplan
+import astropy 
+import pandas as pd
+import numpy as np
+import healpy as hp  
+import matplotlib.pyplot as plt
 from ligo.skymap.postprocess import find_greedy_credible_levels
-from   astroplan.scheduling  import (Transitioner, Schedule, PriorityScheduler)
-from   astroplan.plots       import (plot_airmass, plot_schedule_airmass)
 #======================================================================================================
 start_time          = Time("2019-06-29 21:00") # start time of LT observation 
 end_time            = Time("2019-06-30 5:00")  # end time of LT observation
 LT                  = Observer.at_site('lapalma')  # information about the site
-LT_constraints      = [AltitudeConstraint(20 * u.deg), AtNightConstraint.twilight_nautical(),
-                           MoonSeparationConstraint(5 * u.deg), AirmassConstraint(None)]     # constraits for observability
+LT_constraints      = [AltitudeConstraint(20 * astropy.units.deg), AtNightConstraint.twilight_nautical(),
+                           MoonSeparationConstraint(5 * astropy.units.deg), AirmassConstraint(None)]     # constraits for observability
 Dist                = 40  # estimated distance of the merger event; units in Mega parsec
 Dist_err            = 20  # distance error in Mega parsecs
 Event_ID            = 'GW170817'
@@ -255,7 +237,7 @@ host_candidates                            = host_candidates[credible_list]
 df                                         = host_candidates.loc[:,["name","ra","dec"]] 
 targets_astropy                            = Table.from_pandas(df) # converting the dataframe into an astropy table
 time_range                              = Time([start_time, end_time])   # time of observation
-targets                                 = [FixedTarget(coord = SkyCoord(ra = ra*u.deg, dec=dec*u.deg), name = name) 
+targets                                 = [FixedTarget(coord = SkyCoord(ra = ra* astropy.units.deg, dec=dec* astropy.units.deg), name = name) 
                                             for name, ra, dec in targets_astropy]      
 LT                                      = Observer.at_site('lapalma')  # information about the site
 observable                              = is_observable(LT_constraints,LT,targets, time_range=time_range)  # is observable atleast for a short duration for the given time range
