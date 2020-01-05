@@ -10,7 +10,8 @@ for col_name in GWGC.columns[1:]:  # changing the datatypes of the columns form 
      GWGC.loc[:,col_name] = GWGC.loc[:,col_name].astype(float)
 GWGC             = GWGC.loc[:,['name','ra','dec','BMAG','dist']]
 #======================================================================================================
-# Option 2: CLU NED Catalog
+# Option 2: CLU NED Catalog;
+
 CLU_NED_dir         = "/data1/extprajk/catalogs/CLU_NEDonly.fits" # local directory of CLU_NED 
 data                = Table.read(CLU_NED_dir, format = 'fits')
 CLU_NED             = data.to_pandas()
@@ -95,6 +96,10 @@ targets                                 = [FixedTarget(coord = SkyCoord(ra = ra*
 LT                                      = Observer.at_site('lapalma')  # information about the site
 observable                              = is_observable(LT_constraints,LT,targets, time_range=time_range)  # is observable atleast for a short duration for the given time range
 LT_targets                              = host_candidates[observable]
+
+#**** to be filled for shecduling with RTML *****
+#LT_targets.to_csv(r'Path where you want to store the exported CSV file\File Name.csv')
+
 #========================================================================================================
 # Weighting each observable target based on Blue Magnitude, Location and Distance probabilty 
 no_BMAG                                 = LT_targets.loc[:,'BMAG']   != 'NaN' # removing galaxies that do not have absolute Blue mag
