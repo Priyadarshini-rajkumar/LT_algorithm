@@ -53,8 +53,8 @@ GLADE            = GLADE.loc[:,['name','ra','dec','dist','BMAG']]
 start_time          = Time("2019-06-29 21:00") # start time of LT observation 
 end_time            = Time("2019-06-30 5:00")  # end time of LT observation
 LT                  = Observer.at_site('lapalma')  # information about the site
-LT_constraints      = [AltitudeConstraint(20 * astropy.units.deg), AtNightConstraint.twilight_nautical(),
-                           MoonSeparationConstraint(5 * astropy.units.deg), AirmassConstraint(None)]     # constraits for observability
+LT_constraints      = [AltitudeConstraint(20 * u.deg), AtNightConstraint.twilight_nautical(),
+                           MoonSeparationConstraint(5 * u.deg), AirmassConstraint(None)]     # constraits for observability
 Dist                = 40  # estimated distance of the merger event; units in Mega parsec
 Dist_err            = 20  # distance error in Mega parsecs
 Event_ID            = 'GW170817'
@@ -90,7 +90,7 @@ host_candidates                            = host_candidates[credible_list]
 df                                         = host_candidates.loc[:,["name","ra","dec"]] 
 targets_astropy                            = Table.from_pandas(df) # converting the dataframe into an astropy table
 time_range                              = Time([start_time, end_time])   # time of observation
-targets                                 = [FixedTarget(coord = SkyCoord(ra = ra* astropy.units.deg, dec=dec* astropy.units.deg), name = name) 
+targets                                 = [FixedTarget(coord = SkyCoord(ra = ra* u.deg, dec=dec* u.deg), name = name) 
                                             for name, ra, dec in targets_astropy]      
 LT                                      = Observer.at_site('lapalma')  # information about the site
 observable                              = is_observable(LT_constraints,LT,targets, time_range=time_range)  # is observable atleast for a short duration for the given time range
