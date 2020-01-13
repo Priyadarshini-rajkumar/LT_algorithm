@@ -110,7 +110,7 @@ final_score_list                        = final_score(LT_targets.loc[:, ["BMAG_s
 LT_targets.loc[:, "Final_score"]        = final_score_list
 LT_targets                              = LT_targets.sort_values('Final_score', ascending = False)
 print ("---------A csv file of list of host candidates is created----------------")
-LT_targets.to_csv(r'TargerList.csv')
+LT_targets.to_csv(r'HostCandidatesList.csv')
 #================================================================================================================
 #Calculating total observation time and the exposure time for the Liverpool telescope 
 BNS_mag   = BNS_magnitude(Dist, Dist_err)
