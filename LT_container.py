@@ -1,25 +1,30 @@
 import math 
-import astropy.units as u
+import astroplan
+import astropy 
 import pandas as pd
 import numpy as np
 import healpy as hp  
 import matplotlib.pyplot as plt
-import astropy.coordinates
+import warnings  
+warnings.filterwarnings('ignore')
+from ligo.skymap.postprocess import find_greedy_credible_levels
+from astropy.utils.data      import download_file
+from   astropy.table         import Table
+from   astropy.time          import Time
+from   astropy.coordinates   import SkyCoord,EarthLocation
+from   astroplan.constraints import TimeConstraint
+from ligo.skymap.postprocess import find_greedy_credible_levels
+from   astroplan.scheduling  import (Transitioner, Schedule, PriorityScheduler)
+from   astroplan.plots       import (plot_airmass, plot_schedule_airmass)
 from   astropy               import cosmology
 from   datetime              import datetime
 from scipy.stats             import norm
 from scipy                   import integrate
 from astropy.utils.data      import download_file
-from astropy.cosmology       import default_cosmology
-from   astropy.table         import Table
-from   astropy.time          import Time
-from   astropy.coordinates   import SkyCoord,EarthLocation
-from   astroplan             import (Observer, FixedTarget, AltitudeConstraint,AirmassConstraint,
-                                     AtNightConstraint, MoonSeparationConstraint, is_observable,is_always_observable, ObservingBlock)
-from   astroplan.constraints import TimeConstraint
-from ligo.skymap.postprocess import find_greedy_credible_levels
-from   astroplan.scheduling  import (Transitioner, Schedule, PriorityScheduler)
-from   astroplan.plots       import (plot_airmass, plot_schedule_airmass)
+from astropy.cosmology       import default_cosmology, FlatLambdaCDM   
+from   astroplan             import (Observer, FixedTarget, AltitudeConstraint,AirmassConstraint, AtNightConstraint, MoonSeparationConstraint, is_observable,is_always_observable, ObservingBlock)
+
+
 
 #=======================================================================================================
 def distance_filter(Dist, Dist_err, data):
@@ -146,14 +151,8 @@ def schechter():
     phi_star    = 0.0002 * (h_50 ** 3) #Mpc-3
     L_star      = 10.38
     alpha       = -1.25 
-    L           = np.linspace(6, 11, 1e6)
+    L           = np.linspace(6, 11, 1000000)
     schechter   = (1/binwidth)*phi_star * ((10**L / 10**L_star)** (alpha))* np.exp (- 10**L / 10**L_star) * ((10**(L+0.1))+(10**(L-0.1)))/10**L_star
-    plt.loglog(10**L,schechter,'r')
-    plt.xlabel('Lumninosity')
-    plt.title('Schecter Lumninosity function')
-    plt.grid(True)
-    plt.ylabel('Number density/ Mpc3')
-    plt.show()
     objects_per_Mpc3 = integrate.simps(schechter, L)
     return objects_per_Mpc3
 
