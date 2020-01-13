@@ -1,9 +1,8 @@
 import math 
-import astroplan
-import astropy 
 import pandas as pd
 import numpy as np
 import healpy as hp  
+import astropy.units as u
 import matplotlib.pyplot as plt
 import warnings  
 warnings.filterwarnings('ignore')
